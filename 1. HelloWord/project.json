@@ -12,6 +12,8 @@
   "modules": ["cocos2d"],
 
   "jsList": [
+    "src/animation.js",
+    "src/chosePlayer.js",
     "src/first.js",
     "src/helloWord.js",
     "src/imageLoad.js",
