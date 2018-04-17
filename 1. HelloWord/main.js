@@ -93,7 +93,7 @@ cc.game.onStart = function() {
     g_resources,
     function() {
       // 用导演类的运行场景方法运行第一个场景（单例模式）
-      cc.director.runScene(new FirstScene());
+      cc.director.runScene(new HelloWorldScene());
     },
     this
   );
