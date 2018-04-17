@@ -26,6 +26,8 @@ var HelloWorldLayer = cc.Layer.extend({
     helloLabel.y = size.height / 2 + 200;
     // add the label as a child to this layer
     // 3.3将 label 作为子节点添加到 layer 层中; 5 代表渲染时的被指定的 z-order 相互叠加
+    // 添加缩放
+    helloLabel.setScale(2, 1);
     this.addChild(helloLabel, 5);
 
     // add "HelloWorld" splash screen"
@@ -37,6 +39,9 @@ var HelloWorldLayer = cc.Layer.extend({
       y: size.height / 2
     });
     // 4.2 添加到场景中
+    // 添加缩放
+    this.sprite.setScale(2, 2);
+    this.sprite.setRotation(60);
     this.addChild(this.sprite, 0);
 
     // 5 实现菜单
@@ -82,7 +87,83 @@ var HelloWorldLayer = cc.Layer.extend({
 
     // var menu = new cc.Menu(menuItemLabel, menuItemFont, menuItemAtlasFont);
     // this.addChild(menu, menuItemFont);
+
+    // 6.计划任务
+    // 6.1开始 scheduleUpadte 调用
+    var starScheduleUpdateMenu = new cc.MenuItemFont(
+      'Start Update',
+      function() {
+        this.scheduleUpdate();
+      },
+      this
+    );
+    starScheduleUpdateMenu.setPosition(
+      starScheduleUpdateMenu.width / 2,
+      size.height / 2
+    );
+
+    // 6.2停止 scheduleUpdate 调用
+    var stopScheduleUpdateMenu = new cc.MenuItemFont(
+      'stop Update',
+      function() {
+        this.unscheduleUpdate();
+      },
+      this
+    );
+    stopScheduleUpdateMenu.setPosition(
+      stopScheduleUpdateMenu.width / 2,
+      starScheduleUpdateMenu.y -
+        starScheduleUpdateMenu.height / 2 -
+        stopScheduleUpdateMenu.height / 2
+    );
+
+    // 6.3开始 schedule 调用
+    var startScheduMenu = new cc.MenuItemFont(
+      'start myUpdate',
+      function() {
+        this.schedule(this.myUpdate, 1, cc.REPEAT_FOREVER, 0, 'myUpdate');
+      },
+      this
+    );
+    startScheduMenu.setPosition(
+      startScheduMenu.width / 2,
+      stopScheduleUpdateMenu.y -
+        stopScheduleUpdateMenu.height / 2 -
+        startScheduMenu.height / 2
+    );
+
+    // 6.4停止 schedule 调用
+    var stopScheduleMenu = new cc.MenuItemFont(
+      'stop myUpdate',
+      function() {
+        this.unschedule(this.myUpdate);
+      },
+      this
+    );
+    stopScheduleMenu.setPosition(
+      stopScheduleMenu.width / 2,
+      startScheduMenu.y -
+        startScheduMenu.height / 2 -
+        stopScheduleMenu.height / 2
+    );
+    // 菜单按钮
+    var menu = new cc.Menu(
+      starScheduleUpdateMenu,
+      stopScheduleUpdateMenu,
+      startScheduMenu,
+      stopScheduleMenu
+    );
+    menu.setPosition(0, 0);
+    this.addChild(menu);
     return true;
+  },
+  // 按频率执行
+  update: function(dt) {
+    this.sprite.setRotation(this.sprite.getRotation() + 10);
+  },
+  // 1s执行一次
+  myUpdate() {
+    this.sprite.setRotation(this.sprite.getRotation() - 10);
   }
 });
 
